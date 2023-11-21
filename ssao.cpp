@@ -728,7 +728,7 @@ void Sample::prepareHbaoData(const Projection& projection, int width, int height
   }
   else
   {
-    projScale = float(height) / (tanf(projection.fov * 0.5f) * 2.0f);
+    projScale = float(height) / (tanf(projection.fov * 0.5f * glm::two_pi<float>() / 360.0f) * 2.0f);
   }
 
   // radius
@@ -736,7 +736,7 @@ void Sample::prepareHbaoData(const Projection& projection, int width, int height
   float R                  = m_tweak.radius * meters2viewspace;
   m_hbaoUbo.R2             = R * R;
   m_hbaoUbo.NegInvR2       = -1.0f / m_hbaoUbo.R2;
-  m_hbaoUbo.RadiusToScreen = R * 0.5f * projScale;
+  m_hbaoUbo.RadiusToScreen = R * projScale;
 
   // ao
   m_hbaoUbo.PowExponent  = std::max(m_tweak.intensity, 0.0f);
